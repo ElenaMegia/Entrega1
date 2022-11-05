@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Entrega1</string>
+    <string name="bt_anadir" />
+    <string name="text_tareas">Añade una tarea</string>
 </resources>
