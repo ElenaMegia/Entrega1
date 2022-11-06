@@ -2,4 +2,7 @@
     <string name="app_name">Entrega1</string>
     <string name="bt_anadir" />
     <string name="text_tareas">Añade una tarea</string>
+    <string name="AnadirTarea" />
+    <string name="completada" />
+    <string name="Hecha">completada</string>
 </resources>
