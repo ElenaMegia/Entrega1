@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Task1</string>
+    <string name="bt_anadir" />
+    <string name="text_tareas">Add task</string>
+    <string name="AnadirTarea" />
+    <string name="completada" />
+</resources>
