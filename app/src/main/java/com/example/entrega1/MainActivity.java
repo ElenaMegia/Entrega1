@@ -1,16 +1,18 @@
 package com.example.entrega1;
 
+import static com.example.entrega1.MainActivity.Estado.VER_PENDIENTES;
+import static com.example.entrega1.MainActivity.Estado.VER_HECHAS;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,9 +21,12 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
             MainActivity.class.getSimpleName();
     private EditText text_tareas;
     private ListView lvlistview;
-    public static ArrayList<String> listaMensajes
-            = new ArrayList<>();
-
+    public static ArrayList<Mensajes> listaMensajes
+            = new ArrayList<Mensajes>();
+    public enum Estado {
+        VER_HECHAS, VER_PENDIENTES
+    }
+    private Estado estado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +34,8 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         setContentView(R.layout.activity_main);
         ListView lvMensajes = (ListView) findViewById(R.id.lvlistview);
         text_tareas = (EditText) findViewById(R.id.text_tareas);
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                        listaMensajes);
-        lvMensajes.setAdapter(adapter);
+
+
 
         Button AnadirTarea = (Button) findViewById(R.id.AnadirTarea);
         AnadirTarea.setOnClickListener(this);
@@ -49,11 +52,45 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         startActivity(intent);
     }
 
-    public void onClick(View view) {
-        EditText text_tareas = (EditText) findViewById(R.id.text_tareas);
-        String mensaje = text_tareas.getText().toString();
-        listaMensajes.add(mensaje);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        text_tareas.setText("");
+        BaseDeDatos db = new BaseDeDatos(this);
+        listaMensajes.clear();
+        listaMensajes.addAll(db.getTareas());
+
     }
+
+    public void onClick(View view) {
+
+        EditText text_tareas = (EditText) findViewById(R.id.text_tareas);
+        String nombre = text_tareas.getText().toString();
+        if (nombre.equals("")) {
+            Toast.makeText(this, R.string.text_tareas, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Mensajes mensajes = new Mensajes(nombre);
+
+        BaseDeDatos db = new BaseDeDatos(this);
+        db.nuevaTarea(mensajes);
+
+        if (estado == VER_PENDIENTES) {
+            listaMensajes.add(mensajes);
+            text_tareas.setText("");
+        } else {
+            text_tareas.setText("");
+        }
+        text_tareas.requestFocus();
+
+
+
+
+
+
+
+
+    }
+
+
 }
